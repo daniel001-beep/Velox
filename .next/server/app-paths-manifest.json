@@ -1,8 +1,1 @@
-{
-  "/api/summarize-reviews/route": "app/api/summarize-reviews/route.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/page": "app/page.js",
-  "/about/page": "app/about/page.js",
-  "/products/page": "app/products/page.js",
-  "/products/[id]/page": "app/products/[id]/page.js"
-}
+{}
