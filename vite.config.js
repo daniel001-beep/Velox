@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // This creates the 'out' folder
+  output: 'export', 
+  // IMPORTANT: Replace 'my-nextjs-project' with your actual GitHub repository name
   basePath: '/Redstore', 
   images: {
-    unoptimized: true, // Necessary for static hosting
+    unoptimized: true, 
   },
 };
 
