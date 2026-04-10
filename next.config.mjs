@@ -1,17 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: 'images.unsplash.com',
-            },
-            {
-                protocol: 'https',
-                hostname: '**.public.blob.vercel-storage.com',
-            }
-        ],
-    },
+  output: 'export', // MUST be here for that script in your screenshot to work
+  basePath: '/Redstore', 
+  images: {
+    unoptimized: true, 
+  },
 };
 
 export default nextConfig;
