@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const reviewsText = reviews.map(r => `Rating: ${r.rating}, Comment: ${r.comment}`).join("\n");
 
     const result = await streamText({
-      model: google("gemini-2.0-flash"),
+      model: google("gemini-1.5-flash"),
       system: "You are a helpful e-commerce shopping assistant. Summarize product reviews into a concise Pros and Cons list. Use markdown formatting.",
       messages: [{ role: "user", content: `Please summarize these reviews for Product ID ${productId}:\n\n${reviewsText}` }],
     });

@@ -2,7 +2,8 @@ import Link from "next/link";
 
 export default function About() {
   return (
-    <div className="container py-12 md:py-24 max-w-7xl mx-auto space-y-24 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#050505] py-12 md:py-24">
+    <div className="container max-w-7xl mx-auto space-y-24 px-4 sm:px-6 lg:px-8">
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center gap-12">
         <div className="md:w-1/2 space-y-6">
@@ -69,7 +70,7 @@ export default function About() {
       </section>
 
       {/* Bottom Section */}
-      <section className="flex flex-col-reverse md:flex-row items-center gap-12 pb-12">
+      <section className="flex flex-col-reverse md:flex-row items-center gap-12 pb-16">
         <div className="md:w-1/2 w-full">
           <img
             src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
@@ -89,6 +90,7 @@ export default function About() {
           </div>
         </div>
       </section>
+    </div>
     </div>
   );
 }

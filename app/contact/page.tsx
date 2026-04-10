@@ -37,7 +37,8 @@ export default function Contact() {
   };
 
   return (
-    <div className="container py-12 md:py-24 max-w-7xl mx-auto space-y-24 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#050505] py-12 md:py-24">
+    <div className="container max-w-7xl mx-auto space-y-12 px-4 sm:px-6 lg:px-8">
       {/* Intro Section */}
       <section className="flex flex-col lg:flex-row gap-16">
         <div className="lg:w-1/2 space-y-8">
@@ -135,7 +136,7 @@ export default function Contact() {
       </section>
 
       {/* FAQ Section */}
-      <section className="pt-12 border-t border-white/10 text-center max-w-4xl mx-auto">
+      <section className="pt-12 pb-16 border-t border-white/10 text-center max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-white mb-12">Frequently Asked Questions</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
@@ -157,6 +158,7 @@ export default function Contact() {
           </div>
         </div>
       </section>
+    </div>
     </div>
   );
 }

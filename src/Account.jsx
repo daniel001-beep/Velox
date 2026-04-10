@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
-import Navbar from './Navbar';
 import { AuthContext } from './AuthContext';
 
 export default function Account() {
@@ -46,8 +45,6 @@ export default function Account() {
 
   return (
     <div className="account-page-wrapper">
-      <Navbar />
-
       <div className="auth-container">
         {authState === 'signin' ? (
           <div className="signin-view glass-morphism">
@@ -153,4 +150,4 @@ export default function Account() {
       <Footer />
     </div>
   );
-}
+}

@@ -1,0 +1,8 @@
+my-nextjs-project/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── public/
+├── src/
+├── next.config.ts (or .js)
+└── package.json

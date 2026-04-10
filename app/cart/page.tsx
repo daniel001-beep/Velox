@@ -5,13 +5,14 @@ import Link from "next/link";
 import { CartContext } from "@/app/components/Providers";
 
 export default function Cart() {
-  const { cart, removeFromCart, updateQuantity, cartTotal, cartCount } = useContext(CartContext) || { cart: [], cartTotal: 0, cartCount: 0 };
+  const cartContext = useContext(CartContext);
+  const { cart = [], removeFromCart = () => {}, updateQuantity = () => {}, cartTotal = 0, cartCount = 0 } = cartContext || {};
 
   return (
-    <div className="container py-12 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen">
+    <div className="container py-12 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen pb-16">
       
       {/* Header */}
-      <div className="bg-gradient-to-br from-blue-700 to-blue-900 rounded-3xl p-10 md:p-14 text-center mb-12 shadow-2xl relative overflow-hidden">
+      <div className="bg-linear-to-br from-blue-700 to-blue-900 rounded-2xl p-10 md:p-14 text-center mb-12 shadow-2xl relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 flex items-center justify-center gap-4">
@@ -22,7 +23,7 @@ export default function Cart() {
       </div>
 
       {cart.length === 0 ? (
-        <div className="text-center py-24 bg-white/5 rounded-3xl border border-white/10 shadow-2xl">
+        <div className="text-center py-24 bg-white/5 rounded-2xl border border-white/10 shadow-2xl">
           <i className="fas fa-shopping-cart text-7xl text-gray-500 mb-6 drop-shadow-lg"></i>
           <h3 className="text-3xl font-bold text-white mb-4">Your cart is empty</h3>
           <p className="text-gray-400 text-lg mb-8 max-w-md mx-auto">Looks like you haven't added anything to your cart yet. Discover something new and exciting today!</p>
@@ -34,7 +35,7 @@ export default function Cart() {
         <div className="flex flex-col lg:flex-row gap-10">
           
           {/* Cart Items List */}
-          <div className="flex-1 bg-white/5 rounded-3xl border border-white/10 shadow-xl p-6 md:p-8">
+          <div className="flex-1 bg-white/5 rounded-2xl border border-white/10 shadow-xl p-6 md:p-8">
             <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <i className="fas fa-box text-blue-500"></i> Cart Items 
@@ -107,7 +108,7 @@ export default function Cart() {
 
           {/* Sticky Order Summary */}
           <div className="lg:w-[400px]">
-            <div className="bg-white/5 rounded-3xl border border-white/10 shadow-xl p-8 sticky top-32">
+            <div className="bg-white/5 rounded-2xl border border-white/10 shadow-xl p-8 sticky top-32">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <i className="fas fa-receipt text-blue-500"></i> Order Summary
               </h3>
@@ -129,7 +130,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              <div className="h-[1px] bg-white/10 mb-6"></div>
+              <div className="h-px bg-white/10 mb-6"></div>
 
               <div className="flex justify-between items-center text-2xl font-bold text-white mb-8">
                 <span>Total</span>

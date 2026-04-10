@@ -20,14 +20,14 @@ export async function POST(req: Request) {
       access: "public",
     });
 
-    // 2. Multimodal analysis with Gemini 1.5 Pro
+    // 2. Multimodal analysis with Gemini 1.5 Flash (optimized for speed/cost)
     const { text: description } = await generateText({
-      model: google("models/gemini-1.5-pro-latest"),
+      model: google("gemini-1.5-flash"),
       messages: [
         {
           role: "user",
           content: [
-            { type: "text", text: "What product is this image showing? Provide 3-4 keywords describing its category, material, and style for an e-commerce catalog." },
+            { type: "text", text: "Identify the product in this image. Provide 3-4 keywords describing its category, material, and style for an e-commerce catalog search." },
             { type: "image", image: blobUrl },
           ],
         },
@@ -37,16 +37,19 @@ export async function POST(req: Request) {
     console.log("Gemini Visual Analysis:", description);
 
     // 3. Extract keywords (Gemini usually returns a comma-separated list or short sentence)
-    const keywords = description.split(/[,\s]+/).slice(0, 5);
+    const keywords = description.split(/[,\s]+/).filter(k => k.length > 2).slice(0, 5);
 
     // 4. Zero-Trust Postgres Query
     // We search the 'tags' or 'description' columns for the AI-extracted keywords
-    const matches = await db.select()
-        .from(productsTable)
-        .where(
-            or(...keywords.map(kw => ilike(productsTable.description, `%${kw}%`)))
-        )
-        .limit(8);
+    let matches = [];
+    if (keywords.length > 0) {
+      matches = await db.select()
+          .from(productsTable)
+          .where(
+              or(...keywords.map(kw => ilike(productsTable.description, `%${kw}%`)))
+          )
+          .limit(8);
+    }
 
     return NextResponse.json({
         success: true,

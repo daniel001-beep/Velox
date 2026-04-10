@@ -4,19 +4,23 @@ import { eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import ReviewSummarizer from "@/app/components/ReviewSummarizer";
+import AddToCartButton from "@/app/components/AddToCartButton";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const productId = parseInt(id);
-  
-  const product = await db.query.products.findFirst({
-    where: eq(products.id, productId),
-  });
+  try {
+    const { id } = await params;
+    const productId = parseInt(id, 10);
 
-  if (!product) notFound();
+    if (!id || isNaN(productId)) notFound();
+    
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, productId),
+    });
+
+    if (!product) notFound();
 
   const productReviews = await db.select().from(reviews).where(eq(reviews.productId, productId)).limit(5);
 
@@ -36,8 +40,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="product-detail-image-wrap">
             <div className="product-detail-image">
               <Image
-                src={product.imageUrl}
-                alt={product.name}
+                src={product.imageUrl || (product as any).imageurl || "https://picsum.photos/seed/placeholder/800/800"}
+                alt={product.name || "Product"}
                 fill
                 priority
                 unoptimized
@@ -79,23 +83,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               </p>
             </div>
 
-            {/* Options */}
-            <div className="product-detail-options">
-              <label className="product-detail-options-label">Options</label>
-              <div className="product-detail-options-row">
-                <select className="product-detail-select">
-                  <option>Large</option>
-                  <option>Medium</option>
-                  <option>Small</option>
-                </select>
-                <input type="number" defaultValue={1} min={1} className="product-detail-qty" />
-              </div>
-            </div>
-
-            {/* Add to Cart */}
-            <button className="product-detail-add-btn">
-              Add to Cart
-            </button>
+            {/* Add to Cart logic with state */}
+            <AddToCartButton product={product} />
 
             {/* Trust Badges */}
             <div className="product-detail-badges">
@@ -138,4 +127,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       </div>
     </div>
   );
+  } catch (error) {
+    console.error("Error loading product:", error);
+    notFound();
+  }
 }

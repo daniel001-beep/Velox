@@ -1,33 +1,28 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import AIChatAssistant from "./components/AIChatAssistant";
 import { Providers } from "./components/Providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Vercel-AI | Modern Ecommerce",
-  description: "Next.js + Postgres + Vercel Blob + AI SDK",
+  title: "Redstore - Premium Shopping",
+  description: "Discover premium fashion, tech, and living essentials powered by AI",
 };
-
-import AIChatAssistant from "./components/AIChatAssistant";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-      </head>
-      <body className={inter.className}>
+      <body>
         <Providers>
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex grow flex-col">
             <Navbar />
-            <main className="flex-grow pt-20">{children}</main>
+            <main className="grow pt-20">{children}</main>
+            <Footer />
             <AIChatAssistant />
           </div>
         </Providers>

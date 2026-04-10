@@ -7,10 +7,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   providers: [
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
+  pages: {
+    signIn: "/account",
+    error: "/account",
+  },
   callbacks: {
     session: ({ session, user }: any) => ({
       ...session,
@@ -20,4 +25,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   },
+  trustHost: true,
+  secret: process.env.NEXTAUTH_SECRET,
 });

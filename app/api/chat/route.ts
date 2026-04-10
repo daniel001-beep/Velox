@@ -18,7 +18,7 @@ ${contextStr}
 Use ONLY the provided inventory to answer the user's questions. Do not hallucinate products. If the user asks about an item we do not stock, politely inform them we do not have it.`;
 
     const result = await streamText({
-      model: google('gemini-2.0-flash'),
+      model: google('gemini-1.5-flash'),
       system: systemPrompt,
       messages,
     });

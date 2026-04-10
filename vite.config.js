@@ -1,7 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export', // This creates the 'out' folder
+  basePath: '/Redstore', 
+  images: {
+    unoptimized: true, // Necessary for static hosting
+  },
+};
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+export default nextConfig;

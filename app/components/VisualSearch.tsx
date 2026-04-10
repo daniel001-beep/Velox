@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Camera, Search, X } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function VisualSearch() {
   const [file, setFile] = useState<File | null>(null);
@@ -38,24 +40,26 @@ export default function VisualSearch() {
   return (
     <div className="mb-12 w-full max-w-3xl mx-auto">
       {/* Primary Search Bar */}
-      <div className="relative w-full group">
-          <input 
-              type="text" 
-              placeholder="Search for a product..." 
-              className="w-full bg-white/10 backdrop-blur-md text-white rounded-full py-4 pl-12 pr-16 border border-white/20 focus:border-blue-500 outline-none shadow-lg text-lg transition-all focus:bg-white/15" 
-          />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-400 transition-colors" size={24} />
-          <button 
-             onClick={() => setVisualOpen(!visualOpen)} 
-             className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${visualOpen ? 'bg-blue-500 text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
-             title="Visual Search with Camera"
-          >
-             <Camera size={24} />
-          </button>
+      <div className="relative w-full group flex items-center justify-center px-4">
+          <div className="relative w-full max-w-2xl">
+            <input 
+                type="text" 
+                placeholder="Search for products..." 
+                className="w-full bg-white/10 backdrop-blur-md text-white rounded-full py-3 md:py-4 pl-10 md:pl-12 pr-20 border border-white/20 focus:border-blue-500 outline-none shadow-lg text-base transition-all focus:bg-white/15" 
+            />
+            <Search className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-400 transition-colors w-4 h-4 md:w-5 md:h-5" />
+            <button 
+               onClick={() => setVisualOpen(!visualOpen)} 
+               className={`absolute right-3 md:right-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full flex items-center justify-center w-9 h-9 ring-2 ring-offset-2 ring-offset-[#050505] transition-all duration-300 ${visualOpen ? 'bg-blue-500 text-white ring-blue-500' : 'text-gray-300 hover:text-white hover:bg-white/10 ring-white/20 hover:ring-blue-400'}`}
+               title="Visual Search with Camera - Click to snap & shop"
+            >
+               <Camera className="w-5 h-5 md:w-5 md:h-5" />
+            </button>
+          </div>
       </div>
 
       {visualOpen && (
-        <div className="mt-6 glass-card p-6 rounded-2xl border border-blue-500/30 bg-blue-900/10 backdrop-blur-xl animate-fade-in relative shadow-2xl">
+        <div className="mt-6 glass-card p-6 rounded-2xl border border-blue-500/30 bg-blue-900/10 backdrop-blur-xl animate-fade-in relative shadow-2xl z-10">
           <button onClick={() => setVisualOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white">
              <X size={20} />
           </button>
@@ -96,13 +100,25 @@ export default function VisualSearch() {
           {results.length > 0 && (
               <div className="mt-6">
                   <h4 className="text-sm font-semibold text-white mb-3">Found {results.length} matching products:</h4>
-                  <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
+                  <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
                       {results.map((p) => (
-                          <div key={p.id} className="min-w-[140px] bg-white/10 p-2 rounded-lg border border-white/10 hover:border-blue-500 transition-colors">
-                              <img src={p.imageUrl} alt={p.name} className="w-full h-24 object-cover rounded-md mb-2 shadow-md" />
-                              <p className="text-xs font-bold text-white truncate">{p.name}</p>
-                              <p className="text-xs text-blue-400">${p.price}</p>
-                          </div>
+                          <Link 
+                            key={p.id} 
+                            href={`/products/${p.id}`}
+                            className="min-w-[160px] bg-white/5 p-3 rounded-2xl border border-white/10 hover:border-blue-500 transition-all hover:scale-[1.02] block"
+                          >
+                              <div className="relative w-full h-28 rounded-xl overflow-hidden mb-3">
+                                <Image 
+                                  src={p.imageUrl || p.imageurl || "https://picsum.photos/seed/placeholder/800/800"} 
+                                  alt={p.name || "Product"} 
+                                  fill
+                                  className="object-cover"
+                                  unoptimized
+                                />
+                              </div>
+                              <p className="text-xs font-bold text-white truncate mb-1">{p.name}</p>
+                              <p className="text-sm font-black text-blue-400">${p.price.toFixed(2)}</p>
+                          </Link>
                       ))}
                   </div>
               </div>
