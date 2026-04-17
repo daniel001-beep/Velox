@@ -110,7 +110,7 @@ This repository is under active development and is a prime demonstration of the 
 ​💻 Local Development Setup
 ​Clone the repository: git clone 
 
-https://github.com/daniel001-beep/Velox.git
+https://github.com/daniel001-beep/Velox-Fintech.git
 
 ​Install dependencies: npm install
 
