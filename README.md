@@ -55,7 +55,7 @@ Construction Phase: Sprint 2
 
 💻 Local Development Setup
 Clone the repository: git clone https://github.com/danie0
-l001-beep/velox.git
+001-beep/velox-Fintech.git
 
 Install dependencies: npm install
 
