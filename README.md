@@ -22,15 +22,12 @@ Deployment: Vercel (Production CI/CD Pipeline)
 
 🏗️ Key Architectural Design Decisions 
 1. The React Migration: Declarative Financial UI
-
 The shift from Vanilla JS was driven by the critical requirement for a predictable, declarative state. By leveraging React's component model, I have effectively minimized manual DOM-manipulation bottlenecks. This refactor led to a measured 40% increase in rendering efficiency for core financial components like the real-time cart ledger.
 
 2. High-Concurrency State Reconciliation
-
 Instead of using generic state managers, I implemented a custom Context Provider pattern to handle cart state and user session reconciliation. This guarantees that user transaction data remains consistent across multiple tabs and sessions without redundant API calls, effectively preventing race conditions during multi-item checkout flows.
 
 3. Database Integrity with Supabase RLS (Row-Level Security)
-
 I selected Supabase not just for its real-time capabilities, but for its native integration of Row Level Security (RLS) policies. By treating financial data with a security-first philosophy, the architecture ensures that all transaction records are completely isolated and only accessible to authorized user roles. This mirrors standard enterprise fintech security protocols.
 
 📈 Advanced Optimization & Future Roadmap
