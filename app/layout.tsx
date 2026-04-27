@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import AIChatAssistant from "./components/AIChatAssistant";
 import { Providers } from "./components/Providers";
 import "./globals.css";
 
@@ -23,7 +22,6 @@ export default function RootLayout({
             <Navbar />
             <main className="grow pt-16">{children}</main>
             <Footer />
-            <AIChatAssistant />
           </div>
         </Providers>
       </body>

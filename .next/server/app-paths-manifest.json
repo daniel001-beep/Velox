@@ -1,1 +1,4 @@
-{}
+{
+  "/page": "app/page.js",
+  "/fintech/dashboard/page": "app/fintech/dashboard/page.js"
+}

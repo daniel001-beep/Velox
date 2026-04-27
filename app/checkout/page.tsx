@@ -149,10 +149,10 @@ function CheckoutContent() {
       </div>
 
       <div className="flex flex-col-reverse lg:flex-row gap-12">
-        
+
         {/* Checkout Form */}
-        <div className="flex-1 bg-white/5 rounded-3xl border border-white/10 p-6 md:p-10 shadow-2xl">
-          
+        <form onSubmit={handleCheckout} className="flex-1 bg-white/5 rounded-3xl border border-white/10 p-6 md:p-10 shadow-2xl">
+
           <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
             <i className="fas fa-envelope text-blue-500"></i> Contact Information
           </h2>
@@ -252,15 +252,17 @@ function CheckoutContent() {
           </div>
 
           <button 
-            onClick={() => alert("Order successfully finalized in pure Next.js environment!")}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/30 transition text-lg flex justify-center items-center gap-2"
+            type="submit"
+            disabled={isProcessing}
+            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/30 transition text-lg flex justify-center items-center gap-2"
           >
-            <i className="fas fa-lock"></i> Place Order - ${total.toFixed(2)}
+            <i className="fas fa-lock"></i>
+            {isProcessing ? "Processing..." : `Place Order - $${total.toFixed(2)}`}
           </button>
-        </div>
+        </form>
 
         {/* Order Summary Sticky Sidebar */}
-        <div className="lg:w-[420px]">
+        <div className="lg:w-105">
           <div className="bg-white/5 rounded-3xl border border-white/10 p-8 shadow-2xl sticky top-32">
             <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
               <i className="fas fa-receipt text-blue-500"></i> Order Summary

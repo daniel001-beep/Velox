@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { CheckCircle, Zap, Shield, TrendingUp, Key, Cpu, Lock, AlertCircle } from 'lucide-react';
 
 interface Product {
