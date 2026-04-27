@@ -9,13 +9,21 @@
 ​Velox Fintech targets high-concurrency financial operations with a focus on data integrity. By combining specialized accounting logic with a modern tech stack, I have built a system that treats every transaction as a mission-critical financial event.
 ​
 Key Features
+
 ​✅ Real-time Portfolio Dashboard - Live analytics and asset allocation tracking
+
 ✅ Enterprise Security - Row Level Security (RLS) for data isolation at the database level
+
 ✅ Atomic Transactions - All-or-nothing order processing to ensure financial integrity
+
 ✅ Admin Dashboard - Protected interface for comprehensive system and user management
+
 ✅ Marketplace - Secure discovery and purchase of specialized financial products
+
 ✅ Secure Checkout - Encrypted payment processing with idempotency to prevent duplicates
+
 ✅ Authentication - NextAuth.js v5 with Google OAuth integration
+
 ✅ User Accounts - Secure profile management and session handling
 ​
 🏗️ Architecture
