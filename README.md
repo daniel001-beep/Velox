@@ -6,8 +6,10 @@
 ​Velox Fintech is a sophisticated financial management platform designed for high-concurrency operations. Originally prototyped in Vanilla JavaScript, the system is now built with Next.js 15, React 19, Drizzle ORM, and PostgreSQL.
 
 ​📋 Project Overview
+
 ​Velox Fintech targets high-concurrency financial operations with a focus on data integrity. By combining specialized accounting logic with a modern tech stack, I have built a system that treats every transaction as a mission-critical financial event.
 ​
+
 Key Features
 
 ​✅ Real-time Portfolio Dashboard - Live analytics and asset allocation tracking
