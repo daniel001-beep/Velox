@@ -47,6 +47,7 @@ Key Features
 ​Atomic Transaction Handling
 
 ​Goal: Guarantee order integrity with all-or-nothing semantics
+
 ​Implementation Principles:
 
 ​ACID Compliance: Ensuring Atomicity, Consistency, Isolation, and Durability in every ledger entry.
