@@ -99,20 +99,16 @@ export default function LedgerPage() {
   return (
     <DashboardLayout>
       {/* Header */}
-      <div className="mb-8 border-b border-slate-800 pb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-blue-500/10 rounded-sm border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+      <div className="mb-10 border-b border-slate-800 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex items-start gap-4">
+          <div className="p-4 bg-blue-500/10 rounded-sm border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)] mt-1">
             <BookOpen className="w-8 h-8 text-blue-500" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-slate-100 tracking-tight">Smart Ledger</h1>
-            <p className="text-slate-400 mt-1">Real-time transaction history and automated reconciliation</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 tracking-tight leading-tight">Smart Ledger</h1>
+            <p className="text-sm md:text-base text-slate-400 mt-2 max-w-md">Real-time transaction history and automated reconciliation</p>
           </div>
         </div>
-        <button className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 text-sm font-semibold rounded-sm transition-colors">
-          <Download className="w-4 h-4" />
-          Export CSV
-        </button>
       </div>
 
       {/* Atomic Transfer Engine */}
@@ -158,8 +154,8 @@ export default function LedgerPage() {
         </div>
 
         {/* Ledger Table */}
-        <div className="overflow-x-auto min-h-[400px]">
-          <table className="w-full">
+        <div className="overflow-x-auto min-h-[400px] w-full">
+          <table className="w-full min-w-[800px]">
             <thead>
               <tr className="bg-slate-800/30">
                 <th className="text-left py-4 px-6 text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction ID</th>

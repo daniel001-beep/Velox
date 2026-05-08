@@ -93,7 +93,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="flex flex-col md:grid md:grid-cols-3 gap-6 mb-8 mt-6 md:mt-0">
           {statCards.map((stat, index) => {
             const Icon = stat.icon;
             return (
@@ -131,7 +131,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 gap-8">
+        <div className="flex flex-col gap-8 mt-4">
           
           {/* High-Fidelity Analytics Suite */}
           <div className="bg-slate-900 border border-slate-700 rounded-sm p-6 md:p-8 relative overflow-hidden">

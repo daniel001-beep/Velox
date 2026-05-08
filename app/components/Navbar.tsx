@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { BarChart3, DollarSign, Lock, Server, User, LogOut } from 'lucide-react';
+import { BarChart3, DollarSign, Lock, Server, User, LogOut, TrendingDown } from 'lucide-react';
 import React, { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import VeloxLogo from './VeloxLogo';
@@ -12,15 +12,16 @@ const Navbar = () => {
   const [accountOpen, setAccountOpen] = useState(false);
   const navLinks = [
     { href: '/fintech/dashboard', label: 'Dashboard', icon: BarChart3 },
+    { href: '/fintech/runway', label: 'Runway', icon: TrendingDown },
     { href: '/fintech/marketplace', label: 'Marketplace', icon: DollarSign },
     { href: '/fintech/ledger', label: 'Ledger', icon: BarChart3 },
+    { href: '/fintech/developer', label: 'Developer API', icon: Server },
     { href: '/fintech/security', label: 'Security', icon: Lock },
-    { href: '/fintech/api-status', label: 'API Status', icon: Server },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950 backdrop-blur-lg border-b border-slate-700 transition-all duration-200">
-      <div className="max-w-full px-6 py-3 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 transition-all duration-200">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
         <Link href="/fintech/dashboard" className="shrink-0 no-underline hover:opacity-80 transition-opacity">
           <VeloxLogo size={32} />
         </Link>
@@ -133,9 +134,13 @@ const Navbar = () => {
         
         {/* Mobile Menu */}
         {menuOpen && (
-          <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setMenuOpen(false)}>
+          <div className="fixed inset-0 top-[76px] z-40 lg:hidden animate-in fade-in duration-200">
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} />
+            
+            {/* Menu Card */}
             <nav
-              className="absolute top-16 right-0 w-64 bg-slate-900 border-l border-slate-700 shadow-xl rounded-l-lg p-4 space-y-2 animate-in fade-in slide-in-from-right-full"
+              className="absolute top-4 right-4 left-4 bg-slate-900 border border-slate-700 shadow-2xl rounded-xl p-3 space-y-1 animate-in slide-in-from-top-4 duration-300 z-50"
               onClick={(e) => e.stopPropagation()}
             >
               {navLinks.map((link) => {
@@ -144,15 +149,35 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200 font-medium"
+                    className="flex items-center gap-4 px-4 py-4 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200 font-bold"
                     onClick={() => setMenuOpen(false)}
                     aria-label={link.label}
                   >
-                    <Icon className="w-5 h-5" />
+                    <div className="p-2 bg-slate-950 border border-slate-800 rounded-md">
+                      <Icon className="w-5 h-5 text-blue-500" />
+                    </div>
                     {link.label}
                   </Link>
                 );
               })}
+              
+              {/* Mobile Logout Button (if logged in) */}
+              {session?.user && (
+                <div className="pt-4 mt-2 border-t border-slate-800">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      signOut({ callbackUrl: '/auth/signin' });
+                    }}
+                    className="w-full flex items-center gap-4 px-4 py-4 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg transition-all duration-200 font-bold"
+                  >
+                    <div className="p-2 bg-rose-500/10 border border-rose-500/20 rounded-md">
+                      <LogOut className="w-5 h-5" />
+                    </div>
+                    Sign Out
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         )}

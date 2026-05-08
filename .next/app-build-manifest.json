@@ -22,40 +22,45 @@
       "static/chunks/main-app.js",
       "static/chunks/app/fintech/dashboard/page.js"
     ],
-    "/fintech/api-status/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/fintech/api-status/page.js"
-    ],
     "/api/auth/[...nextauth]/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/auth/[...nextauth]/route.js"
-    ],
-    "/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
-    ],
-    "/fintech/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/fintech/admin/page.js"
-    ],
-    "/fintech/admin/users/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/fintech/admin/users/page.js"
     ],
     "/fintech/ledger/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/fintech/ledger/page.js"
     ],
-    "/_not-found/page": [
+    "/fintech/api-status/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/fintech/api-status/page.js"
+    ],
+    "/fintech/marketplace/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/fintech/marketplace/page.js"
+    ],
+    "/fintech/marketplace/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/fintech/marketplace/[id]/page.js"
+    ],
+    "/fintech/security/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/fintech/security/page.js"
+    ],
+    "/fintech/runway/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/fintech/runway/page.js"
+    ],
+    "/fintech/developer/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/fintech/developer/page.js"
     ]
   }
 }

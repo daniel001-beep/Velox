@@ -119,14 +119,14 @@ interface MarketplaceGridProps {
 export default function MarketplaceGrid({ onSelectProduct }: MarketplaceGridProps) {
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex flex-col lg:flex-row lg:flex-wrap gap-8">
         {products.map((product) => {
           const Icon = product.icon;
           
           return (
             <div
               key={product.id}
-              className="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800 transition-all duration-300 flex flex-col group relative overflow-hidden"
+              className="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-sm p-8 hover:bg-slate-800 transition-all duration-300 flex flex-col group relative overflow-hidden w-full lg:w-[calc(33.333%-1.5rem)]"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
@@ -139,7 +139,7 @@ export default function MarketplaceGrid({ onSelectProduct }: MarketplaceGridProp
                     {product.category}
                   </p>
                 </div>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-slate-800 border border-slate-700 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0 bg-slate-800 border border-slate-700 group-hover:scale-110 transition-transform">
                   <Icon className="w-5 h-5" style={{ color: product.accentColor }} />
                 </div>
               </div>
@@ -160,11 +160,11 @@ export default function MarketplaceGrid({ onSelectProduct }: MarketplaceGridProp
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
-                <div className="bg-slate-950/50 rounded-md p-3 border border-slate-800">
+                <div className="bg-slate-950/50 rounded-sm p-3 border border-slate-800">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Target Yield</p>
                   <p className="text-sm font-bold text-emerald-400 font-mono">{product.yieldRate}</p>
                 </div>
-                <div className="bg-slate-950/50 rounded-md p-3 border border-slate-800">
+                <div className="bg-slate-950/50 rounded-sm p-3 border border-slate-800">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Liquidity</p>
                   <p className="text-sm font-bold text-slate-300 font-mono">{product.liquidity}</p>
                 </div>
@@ -173,7 +173,7 @@ export default function MarketplaceGrid({ onSelectProduct }: MarketplaceGridProp
               <div className="pt-4 border-t border-slate-700/50 mt-auto relative z-10">
                 <button
                   onClick={() => onSelectProduct?.(product.id)}
-                  className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 text-sm font-bold rounded-lg transition-all duration-200"
+                  className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 text-sm font-bold rounded-sm transition-all duration-200"
                   aria-label={"Invest in " + product.title}
                 >
                   Allocate Capital

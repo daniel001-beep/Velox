@@ -101,10 +101,10 @@ export default function SendMoneyCard({ onTransferSuccess }: SendMoneyCardProps)
       <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 relative z-10">
+      <div className="flex flex-row items-start justify-between mb-8 relative z-10">
         <div>
-          <h2 className="text-xl font-bold text-slate-100">Atomic Transfer Engine</h2>
-          <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-1">Drizzle ORM • Postgres RPC</p>
+          <h2 className="text-2xl md:text-xl font-bold text-slate-100 leading-tight">Atomic Transfer Engine</h2>
+          <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-2">Drizzle ORM • Postgres RPC</p>
         </div>
         <div className="p-2 bg-slate-950/50 rounded-lg border border-slate-800">
           <Activity className="w-5 h-5 text-blue-500" />
@@ -134,7 +134,7 @@ export default function SendMoneyCard({ onTransferSuccess }: SendMoneyCardProps)
           </div>
         </div>
       ) : (
-        <div className="space-y-4 relative z-10">
+        <div className="flex flex-col gap-4 relative z-10 w-full mt-4">
           {/* Email Input */}
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -143,7 +143,7 @@ export default function SendMoneyCard({ onTransferSuccess }: SendMoneyCardProps)
               placeholder="Recipient Email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-slate-950/50 border border-slate-700 rounded-lg py-3 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="block w-full h-12 bg-slate-950/50 border border-slate-700 rounded-lg px-4 text-center text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
               disabled={status !== 'IDLE'}
             />
           </div>
@@ -156,19 +156,19 @@ export default function SendMoneyCard({ onTransferSuccess }: SendMoneyCardProps)
               placeholder="Amount (USD)" 
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full bg-slate-950/50 border border-slate-700 rounded-lg py-3 pl-10 pr-4 text-sm text-slate-200 font-mono placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="block w-full h-12 bg-slate-950/50 border border-slate-700 rounded-lg px-4 text-center text-sm text-slate-200 font-mono placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
               disabled={status !== 'IDLE'}
             />
           </div>
 
           {/* Note Input */}
-          <div className="relative mb-6">
+          <div className="relative mb-2">
             <FileText className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
             <textarea 
               placeholder="Transfer Note (Internal Audit Log)" 
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full bg-slate-950/50 border border-slate-700 rounded-lg py-3 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors resize-none h-20"
+              className="block w-full min-h-[80px] bg-slate-950/50 border border-slate-700 rounded-lg p-3 px-4 text-center text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors resize-none"
               disabled={status !== 'IDLE'}
             />
           </div>

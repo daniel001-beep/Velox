@@ -63,10 +63,12 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
           </div>
           
           <div className="bg-slate-800 border border-slate-700 p-6 rounded-sm shrink-0 w-full md:w-auto z-10 text-center md:text-left">
-            <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">Pricing Model</p>
-            <p className="text-xl font-bold text-slate-100 mb-6">{product.pricingModel}</p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Target Yield</p>
+            <p className="text-2xl font-bold text-emerald-400 font-mono mb-2">{product.yieldRate}</p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Liquidity</p>
+            <p className="text-sm font-bold text-slate-100 mb-6">{product.liquidity}</p>
             <button className="w-full py-3 px-8 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-sm transition-colors text-base">
-              Provision Service
+              Allocate Capital
             </button>
           </div>
         </div>
@@ -100,15 +102,12 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
             <div className="bg-slate-900 border border-slate-700 rounded-sm p-8">
               <h3 className="text-lg font-bold text-slate-100 mb-4">Compliance</h3>
               <div className="flex flex-col gap-3">
-                {product.compliance.map((badge) => (
+                {['SOC 2 Type II', 'ISO 27001', 'PCI DSS'].map((badge) => (
                   <div key={badge} className="flex items-center gap-3 p-3 bg-slate-800 rounded-sm border border-slate-700">
                     <div className="w-2 h-2 bg-emerald-500 rounded-sm"></div>
                     <span className="text-sm font-bold text-slate-200 uppercase tracking-widest">{badge} Certified</span>
                   </div>
                 ))}
-                {product.compliance.length === 0 && (
-                  <p className="text-slate-400 text-sm">Standard compliance applies.</p>
-                )}
               </div>
             </div>
             
