@@ -1,9 +1,16 @@
 import { db } from "@/src/db";
 import { products } from "@/src/db/schema";
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const session = await auth();
+    
+    // API Zero-Trust Security: Ensure only authenticated admins can hit this endpoint
+    if (!session || !session.user || !session.user.isAdmin) {
+      return NextResponse.json({ error: "Unauthorized access blocked by API Gateway" }, { status: 401 });
+    }
     // Try to count products in the database
     const result = await db.select().from(products).limit(1);
     

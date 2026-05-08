@@ -1,16 +1,28 @@
 import NextAuth from "next-auth";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@/src/db";
-import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db),
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      allowDangerousEmailAccountLinking: true,
-    }),
+    Credentials({
+      name: "Founder Access",
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "founder@velox.com" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        // Demo Mode Authentication
+        // Accepting any password for the presentation to avoid login friction
+        if (credentials?.email && credentials?.password) {
+          return {
+            id: "vc-demo-id-1",
+            name: "Velox Founder",
+            email: credentials.email as string,
+            isAdmin: true,
+          };
+        }
+        return null;
+      }
+    })
   ],
   pages: {
     signIn: "/auth/signin",
@@ -24,6 +36,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.isAdmin = user.isAdmin;
+        token.email = user.email; // explicitly store email in token
       }
       // Grant admin rights if the email matches the environment variable
       if (token.email && process.env.ADMIN_EMAIL && token.email === process.env.ADMIN_EMAIL) {
@@ -35,6 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.isAdmin = token.isAdmin as boolean;
+        session.user.email = token.email as string; // explicitly surface email to middleware
       }
       return session;
     },

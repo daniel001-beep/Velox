@@ -1,6 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
-import { CheckCircle, Zap, Shield, TrendingUp, Key, Cpu, Lock, AlertCircle } from 'lucide-react';
+import { Bitcoin, LineChart, Landmark, TrendingUp, ShieldCheck, PieChart, Zap } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -8,140 +7,108 @@ interface Product {
   description: string;
   category: string;
   features: string[];
-  compliance: ('soc2' | 'pci')[];
-  pricingModel: string;
+  yieldRate: string;
+  liquidity: string;
   icon: React.ElementType;
   accentColor: string;
 }
 
 export const products: Product[] = [
   {
-    id: 'fraud-detection',
-    title: 'AI Fraud Detection',
-    description: 'Real-time monitoring. Detect anomalies in milliseconds with machine learning precision.',
-    category: 'Security',
+    id: 'us-treasury',
+    title: 'Short-Term T-Bills',
+    description: 'Ultra-safe, sovereign-backed US Treasury Bills. Protect your runway from inflation.',
+    category: 'Fixed Income',
     features: [
-      'Real-time anomaly detection',
-      'Sub-millisecond latency',
-      'Customizable thresholds',
-      'Audit logging',
+      'Sovereign-backed security',
+      'Auto-rolling available',
+      'Zero management fees',
+      'State tax exempt',
     ],
-    compliance: ['soc2', 'pci'],
-    pricingModel: 'Usage-based • $0.05-0.50/1M transactions',
-    icon: Zap,
+    yieldRate: '5.25% APY',
+    liquidity: 'T+1 Settlement',
+    icon: Landmark,
     accentColor: '#3b82f6',
   },
   {
-    id: 'multicurrency',
-    title: 'Multi-Currency Engine',
-    description: 'Automatic reconciliation API with live FX rates. Handle 50+ currencies with sub-10ms latency.',
-    category: 'Integration',
+    id: 'crypto-staking',
+    title: 'Institutional Crypto Yield',
+    description: 'Regulated, over-collateralized stablecoin staking (USDC/USDT). Generate yield on idle runway.',
+    category: 'Digital Assets',
     features: [
-      'Live FX rate updates',
-      'Automatic reconciliation',
-      '50+ currency support',
-      'Sub-10ms latency guarantee',
+      'Over-collateralized backing',
+      'Daily compounding interest',
+      'Smart contract insurance',
+      'Real-time proof of reserves',
     ],
-    compliance: ['pci'],
-    pricingModel: 'Subscription • $499-2,990/month',
-    icon: TrendingUp,
-    accentColor: '#06b6d4',
-  },
-  {
-    id: 'transaction-processor',
-    title: 'Transaction Processor',
-    description: 'Secure HTTP protocol. Orchestrate complex transactions with zero-trust architecture.',
-    category: 'Protocol',
-    features: [
-      'Protocol compliance',
-      'Autonomous execution',
-      'Stablecoin settlement',
-      'Zero-trust architecture',
-    ],
-    compliance: ['soc2', 'pci'],
-    pricingModel: 'License • $1,950/month',
-    icon: Cpu,
+    yieldRate: '8.50% APY',
+    liquidity: 'Instant',
+    icon: Bitcoin,
     accentColor: '#f59e0b',
   },
   {
-    id: 'insurtech',
-    title: 'Embedded Insurtech API',
-    description: 'Dynamic policy purchasing with real-time quote generation. Programmatic insurance integration.',
-    category: 'Insurance',
+    id: 'venture-debt',
+    title: 'Founder Venture Debt',
+    description: 'Non-dilutive capital to extend your runway without giving up board seats or equity.',
+    category: 'Credit',
     features: [
-      'Real-time quote generation',
-      'Dynamic policy purchasing',
-      'Automated claims processing',
-      'Risk assessment engine',
+      'Zero warrant coverage',
+      'Revenue-based repayment',
+      'No personal guarantees',
+      'Fast 48-hour approval',
     ],
-    compliance: ['soc2'],
-    pricingModel: 'Credits • $0.10-0.75 per policy',
-    icon: Shield,
-    accentColor: '#ef4444',
-  },
-  {
-    id: 'digital-id',
-    title: 'Digital ID Verification',
-    description: 'Biometric KYC/AML verification. Enterprise-grade compliance with real-time decisioning.',
-    category: 'Compliance',
-    features: [
-      'Biometric verification',
-      'KYC/AML screening',
-      'Real-time decisioning',
-      'GDPR-compliant storage',
-    ],
-    compliance: ['soc2', 'pci'],
-    pricingModel: 'Usage-based • $0.75-2.50 per verification',
-    icon: Lock,
+    yieldRate: 'Prime + 2%',
+    liquidity: 'Drawdown',
+    icon: LineChart,
     accentColor: '#8b5cf6',
   },
   {
-    id: 'cash-flow',
-    title: 'Cash Flow Forecaster',
-    description: 'Predictive liquidity algorithms using supervised learning. Real-time dashboards included.',
-    category: 'Analytics',
+    id: 'corporate-cash',
+    title: 'Corporate High-Yield',
+    description: 'A premium cash sweep account spreading funds across multiple FDIC-insured network banks.',
+    category: 'Cash Management',
     features: [
-      'Predictive modeling',
-      'Liquidity forecasts',
-      'Real-time dashboards',
-      '90-day projections',
+      '$5M FDIC Insurance',
+      'Unlimited free wires',
+      'Corporate card integration',
+      'Automated sweeps',
     ],
-    compliance: ['pci'],
-    pricingModel: 'Pro Plan • $2,490/month',
-    icon: TrendingUp,
-    accentColor: '#22c55e',
+    yieldRate: '4.85% APY',
+    liquidity: 'Instant',
+    icon: ShieldCheck,
+    accentColor: '#10b981',
   },
   {
-    id: 'spend-optimizer',
-    title: 'SaaS Spend Optimizer',
-    description: 'AI-powered subscription rate negotiator. Achieve 30%+ savings on enterprise SaaS.',
-    category: 'Optimization',
+    id: 'money-market',
+    title: 'Vanguard Money Market',
+    description: 'Access institutional-class money market funds directly from your Velox treasury dashboard.',
+    category: 'Mutual Funds',
     features: [
-      'AI-powered negotiation',
-      'Spend analytics',
-      '30%+ savings average',
-      'Audit trail logging',
+      'Institutional share class',
+      'Diversified commercial paper',
+      'Dividend reinvestment',
+      'Low expense ratio',
     ],
-    compliance: [],
-    pricingModel: 'Revenue share • 20% of savings',
-    icon: AlertCircle,
-    accentColor: '#f59e0b',
-  },
-  {
-    id: 'wallet-rails',
-    title: 'Programmable Wallet Rails',
-    description: 'Key governance API for wallet infrastructure. Secure fund movement with audit logging.',
-    category: 'Infrastructure',
-    features: [
-      'Key governance',
-      'Fund movement APIs',
-      'Audit trail logging',
-      'Multi-sig support',
-    ],
-    compliance: ['soc2', 'pci'],
-    pricingModel: 'License • $3,990/month',
-    icon: Key,
+    yieldRate: '5.10% APY',
+    liquidity: 'T+1 Settlement',
+    icon: PieChart,
     accentColor: '#06b6d4',
+  },
+  {
+    id: 'startup-fx',
+    title: 'Startup FX & Hedging',
+    description: 'Lock in forward contracts to protect your international payroll from sudden currency fluctuations.',
+    category: 'Forex',
+    features: [
+      'Forward contracts',
+      'Zero markup on mid-market',
+      '50+ currency pairs',
+      'Automated payroll routing',
+    ],
+    yieldRate: 'Dynamic',
+    liquidity: 'Contract Based',
+    icon: Zap,
+    accentColor: '#ef4444',
   },
 ];
 
@@ -152,7 +119,6 @@ interface MarketplaceGridProps {
 export default function MarketplaceGrid({ onSelectProduct }: MarketplaceGridProps) {
   return (
     <div className="w-full">
-      {/* Product Grid - 2-3 Columns */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => {
           const Icon = product.icon;
@@ -160,95 +126,62 @@ export default function MarketplaceGrid({ onSelectProduct }: MarketplaceGridProp
           return (
             <div
               key={product.id}
-              className="bg-slate-900 border border-slate-700 rounded-sm p-8 hover:bg-slate-800 transition-all duration-300 flex flex-col"
+              className="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800 transition-all duration-300 flex flex-col group relative overflow-hidden"
             >
-              {/* Icon & Title */}
-              <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="flex items-start justify-between gap-4 mb-4 relative z-10">
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-slate-100 mb-1">
                     {product.title}
                   </h3>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                     {product.category}
                   </p>
                 </div>
-                <div className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0 bg-slate-700 border border-slate-600">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-slate-800 border border-slate-700 group-hover:scale-110 transition-transform">
                   <Icon className="w-5 h-5" style={{ color: product.accentColor }} />
                 </div>
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-slate-400 leading-relaxed mb-4">
+              <p className="text-sm text-slate-400 leading-relaxed mb-6 relative z-10">
                 {product.description}
               </p>
 
-              {/* Features List */}
-              <div className="space-y-2 mb-4">
+              <div className="space-y-2 mb-6 relative z-10">
                 {product.features.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
-                    <span className="text-xs text-slate-400">
+                    <ShieldCheck className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                    <span className="text-xs text-slate-300">
                       {feature}
                     </span>
                   </div>
                 ))}
               </div>
 
-              {/* Compliance Badges */}
-              {product.compliance.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {product.compliance.map((badge) => (
-                    <span
-                      key={badge}
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-slate-700 border border-slate-600 text-slate-300 uppercase tracking-tighter"
-                    >
-                      {badge} certified
-                    </span>
-                  ))}
+              <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
+                <div className="bg-slate-950/50 rounded-md p-3 border border-slate-800">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Target Yield</p>
+                  <p className="text-sm font-bold text-emerald-400 font-mono">{product.yieldRate}</p>
                 </div>
-              )}
+                <div className="bg-slate-950/50 rounded-md p-3 border border-slate-800">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Liquidity</p>
+                  <p className="text-sm font-bold text-slate-300 font-mono">{product.liquidity}</p>
+                </div>
+              </div>
 
-              {/* Pricing Model & Button */}
-              <div className="pt-4 border-t border-slate-700 mt-auto">
-                <p className="text-xs text-slate-500 mb-4">
-                  {product.pricingModel}
-                </p>
-
+              <div className="pt-4 border-t border-slate-700/50 mt-auto relative z-10">
                 <button
                   onClick={() => onSelectProduct?.(product.id)}
-                  className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition-all duration-200"
-                  aria-label={`Select ${product.title}`}
+                  className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 text-sm font-bold rounded-lg transition-all duration-200"
+                  aria-label={"Invest in " + product.title}
                 >
-                  Select Service
+                  Allocate Capital
                 </button>
               </div>
             </div>
           );
         })}
-      </div>
-
-      {/* Footer Info */}
-      <div className="border-t border-slate-700 mt-8 pt-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div>
-            <h4 className="text-green-400 font-bold text-lg mb-2">SOC 2 Type II</h4>
-            <p className="text-sm text-slate-400">
-              Enterprise-grade security and compliance certifications across all services
-            </p>
-          </div>
-          <div>
-            <h4 className="text-blue-400 font-bold text-lg mb-2">Sub-50ms Latency</h4>
-            <p className="text-sm text-slate-400">
-              Optimized for high-frequency trading and real-time reconciliation
-            </p>
-          </div>
-          <div>
-            <h4 className="text-cyan-400 font-bold text-lg mb-2">Usage-Based Pricing</h4>
-            <p className="text-sm text-slate-400">
-              Scale-as-you-grow model with transparent billing and no hidden fees
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

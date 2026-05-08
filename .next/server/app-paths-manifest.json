@@ -1,8 +1,10 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/auth/signup/page": "app/auth/signup/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/admin/page": "app/admin/page.js",
   "/auth/signin/page": "app/auth/signin/page.js",
+  "/fintech/admin/page": "app/fintech/admin/page.js",
   "/fintech/dashboard/page": "app/fintech/dashboard/page.js",
-  "/fintech/api-status/page": "app/fintech/api-status/page.js",
-  "/fintech/security/page": "app/fintech/security/page.js"
+  "/fintech/admin/orders/page": "app/fintech/admin/orders/page.js",
+  "/fintech/marketplace/page": "app/fintech/marketplace/page.js",
+  "/fintech/admin/users/page": "app/fintech/admin/users/page.js"
 }
