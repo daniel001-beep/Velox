@@ -113,5 +113,6 @@ We welcome contributions from the open-source community!
 5. Open a Pull Request
 
 ---
+**License:** Proprietary - Velox Fintech | Built by [Idowu Daniel](https://mail.google.com/mail/?view=cm&fs=1&to=idowuisdaniel1@gmail.com&su=Inquiry%20regarding%20Velox%20Fintech%20Architecture)
 
 *Velox Fintech - Built for the future of finance.*
