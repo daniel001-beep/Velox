@@ -1,21 +1,22 @@
-# 🏎️ Velox Fintech Dashboard
+# 🏎️ Velox Treasury Engine (YC Demo Day Ready)
 
-> An enterprise-grade financial management platform with real-time portfolio analytics, secure transaction handling, and AI-powered insights.
+> A high-performance, enterprise-grade financial reconciliation and treasury platform built for modern startups.
 
 ![Velox Fintech Demo](https://raw.githubusercontent.com/daniel001-beep/Velox-Fintech/main/public/demo.png)
 
 ## 📋 Overview
 
-Velox Fintech is a highly scalable, high-concurrency financial operations dashboard. Built for modern financial institutions, it features an enterprise "glassmorphism" aesthetic, real-time data visualization, and an autonomous financial marketplace.
+Velox is an institutional-grade treasury dashboard designed to give CFOs a single pane of glass for fiat, crypto staking, and venture debt. Built on a state-of-the-art edge architecture, it features a strictly ACID-compliant "Atomic Transfer Engine," real-time ledger synchronization, and comprehensive enterprise security out of the box.
 
-This repository represents the **core frontend and API architecture** for the Velox Fintech product, built on a state-of-the-art Next.js 15 stack.
+This repository represents the **core frontend, API architecture, and database logic** for the Velox platform.
 
-### Key Features
-✅ **Real-Time Portfolio Analytics**: Interactive `Recharts` data visualization for asset allocation and performance tracking.  
-✅ **Financial Marketplace**: Browse and integrate modular financial APIs (Fraud Detection, Multi-Currency Engines, etc.).  
-✅ **Enterprise Security**: Row Level Security (RLS) data isolation and NextAuth.js authentication.  
-✅ **AI-Powered Insights**: Integrated AI chat assistant for rapid financial querying and ledger analysis.  
-✅ **Zero-Trust Architecture**: Admin-only control planes and strict API route protection.  
+### ✨ What's New (Demo Day Build)
+✅ **Atomic Transfer Engine**: A slide-to-confirm transfer interface guaranteed by PostgreSQL `BEGIN/COMMIT` transactional locks to eliminate double-spend race conditions.  
+✅ **Super Admin Hub**: A restricted control plane for order reconciliation and global system health monitoring.  
+✅ **User Auditing & KYC**: A brand new User Management module tracking active sessions, KYC/AML statuses, and suspicious account freezing.  
+✅ **Agentic Command Bar**: A `Cmd+K` AI-powered search bar for rapid data extraction and simulated CSV report generation.  
+✅ **Mobile-First Responsiveness**: Re-engineered dashboard grid structures and touch-friendly horizontal table scrolling.  
+✅ **Enterprise Security Hardening**: Implemented NextAuth RBAC middleware, Zero-Trust API routes, and XSS (Cross-Site Scripting) sanitization via DOMPurify.
 
 ---
 
@@ -23,83 +24,75 @@ This repository represents the **core frontend and API architecture** for the Ve
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend Framework** | [Next.js 15 (App Router)](https://nextjs.org/) |
+| **Framework** | [Next.js 15 (App Router)](https://nextjs.org/) |
 | **UI Library** | [React 19](https://react.dev/) |
-| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) |
-| **Data Visualization** | [Recharts](https://recharts.org/) |
-| **Authentication** | [NextAuth.js v5 (Auth.js)](https://authjs.dev/) |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) + Glassmorphism |
+| **Authentication** | [NextAuth.js v5](https://authjs.dev/) (Credentials + JWT) |
 | **Database ORM** | [Drizzle ORM](https://orm.drizzle.team/) |
-| **Database** | PostgreSQL |
-| **Icons** | [Lucide React](https://lucide.dev/) |
+| **Database** | PostgreSQL (Supabase) with RLS |
+| **Security** | DOMPurify (XSS Protection) |
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Demo Mode)
 
-Get the Velox Fintech dashboard running locally in under 3 minutes.
+Get the Velox Treasury Engine running locally in under 2 minutes.
 
 ### 1. Clone the repository
-\`\`\`bash
+```bash
 git clone https://github.com/daniel001-beep/Velox-Fintech.git
 cd Velox-Fintech
-\`\`\`
+```
 
 ### 2. Install dependencies
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### 3. Environment Setup
 Copy the example environment file:
-\`\`\`bash
+```bash
 cp .env.example .env.local
-\`\`\`
-Fill in your credentials in `.env.local`:
-- `AUTH_SECRET`: Generate one using \`npx auth secret\`
-- `AUTH_GOOGLE_ID` & `AUTH_GOOGLE_SECRET`: Your Google OAuth credentials
-- `POSTGRES_URL`: Your PostgreSQL connection string
+```
+Fill in your `.env.local`:
+- `AUTH_SECRET`: Generate one using `npx auth secret`
+- `ADMIN_EMAIL`: `idowuisdaniel1@gmail.com` (Grants Super Admin access)
 
-### 4. Database Migrations
-Push the Drizzle schema to your database:
-\`\`\`bash
-npm run db:push
-\`\`\`
-
-### 5. Run the Development Server
-\`\`\`bash
+### 4. Run the Development Server
+```bash
 npm run dev
-\`\`\`
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application. 
+*(Note: To bypass the login screen for demo purposes, enter the authorized `ADMIN_EMAIL` and any password).*
 
 ---
 
-## 📂 Repository Architecture
+## 📂 Architecture
 
-We maintain a strict, domain-driven folder structure to ensure high development velocity and maintainability.
-
-\`\`\`
+```text
 app/
-├── api/                  # Secure API routes (auth, admin, db-health)
+├── api/                  # Zero-Trust API routes (auth, admin, db-health)
 ├── auth/                 # Authentication pages (signin, signup)
-├── components/           # Reusable UI components and charts
+├── components/           # Reusable UI (AgenticCommandBar, SendMoneyCard)
 ├── fintech/              # Core Application
-│   ├── admin/            # Protected admin control plane
+│   ├── admin/            # Super Admin Hub (Orders, User Management)
 │   ├── dashboard/        # Main portfolio analytics view
-│   ├── ledger/           # Transaction history and ledgers
-│   ├── marketplace/      # Financial API product discovery
-│   └── security/         # Security and audit logs
-├── db-status/            # System health monitoring
-└── page.tsx              # Root redirect to /fintech/dashboard
-\`\`\`
+│   ├── ledger/           # Atomic Transfer Engine & Transaction history
+│   ├── marketplace/      # Venture Debt & Crypto Staking products
+│   └── security/         # Security auditing and Active Sessions
+└── page.tsx              # Root redirect middleware
+```
 
 ---
 
-## 🔐 Security & Compliance
+## 🔐 Security & Compliance (Defense In Depth)
 
-Velox Fintech is designed with **SOC 2 Type II** compliance in mind. 
-- **Authentication**: All API routes and pages are protected by NextAuth middleware. Unauthenticated users are strictly redirected.
-- **Data Isolation**: Database queries enforce strict `userId` checks (RLS equivalents at the application layer) to prevent cross-tenant data leakage.
-- **Admin Access**: Role-based access control (RBAC) ensures only users with the `isAdmin` flag can access the `/fintech/admin` routes or administrative APIs.
+Velox is designed to handle institutional capital. Security is not an afterthought.
+
+- **Role-Based Access Control (RBAC)**: All administrative endpoints (`/admin/*`) are strictly firewalled by Next.js Edge Middleware. Unauthorized sessions are instantly rejected.
+- **XSS Protection**: All user-generated text (like Transfer Notes) is sanitized via `DOMPurify` before hitting the database or the DOM.
+- **Zero-Trust APIs**: Every backend endpoint independently validates the cryptographic JWT signature before executing operations.
+- **ACID Transactions**: Financial ledger mutations are grouped into strict PostgreSQL RPC functions ensuring database consistency under heavy concurrent load.
 
 ---
 
@@ -107,12 +100,11 @@ Velox Fintech is designed with **SOC 2 Type II** compliance in mind.
 
 We welcome contributions from the open-source community! 
 1. Fork the Project
-2. Create your Feature Branch (\`git checkout -b feature/AmazingFeature\`)
-3. Commit your Changes (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push to the Branch (\`git push origin feature/AmazingFeature\`)
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ---
-**License:** Proprietary - Velox Fintech | Built by [Idowu Daniel](https://mail.google.com/mail/?view=cm&fs=1&to=idowuisdaniel1@gmail.com&su=Inquiry%20regarding%20Velox%20Fintech%20Architecture)
 
-*Velox Fintech - Built for the future of finance.*
+*Velox Treasury Engine - Move fast. Settle securely.*
