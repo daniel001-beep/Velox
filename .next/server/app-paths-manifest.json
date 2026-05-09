@@ -1,9 +1,4 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/fintech/security/page": "app/fintech/security/page.js",
-  "/fintech/marketplace/page": "app/fintech/marketplace/page.js",
-  "/fintech/developer/page": "app/fintech/developer/page.js",
-  "/fintech/marketplace/[id]/page": "app/fintech/marketplace/[id]/page.js",
-  "/fintech/dashboard/page": "app/fintech/dashboard/page.js",
-  "/fintech/runway/page": "app/fintech/runway/page.js"
+  "/fintech/dashboard/page": "app/fintech/dashboard/page.js"
 }
