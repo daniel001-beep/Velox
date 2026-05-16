@@ -77,8 +77,8 @@ export const VeloxLogoLight: React.FC<VeloxLogoProps> = ({ size = 36, className 
 
 const VeloxLogo: React.FC<VeloxLogoProps> = ({ size = 36, variant = 'full', className = '' }) => {
   const isDark = variant !== 'light';
-  const textColor = isDark ? 'text-slate-100' : 'text-slate-900';
-  const mutedColor = isDark ? 'text-slate-400' : 'text-slate-500';
+  const textColor = isDark ? 'text-slate-100/40' : 'text-slate-900/40';
+  const mutedColor = isDark ? 'text-slate-500/30' : 'text-slate-500/40';
 
   return (
     <div

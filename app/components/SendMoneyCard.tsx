@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, CheckCircle2, ShieldCheck, Mail, DollarSign, FileText, ArrowRight, Activity } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
@@ -52,19 +52,18 @@ export default function SendMoneyCard({ onTransferSuccess }: SendMoneyCardProps)
     }
   };
 
-  const handlePointerUp = () => {
+  const handlePointerUp = useCallback(() => {
     setIsDragging(false);
     if (sliderPosition < maxSlide * 0.95 && status === 'IDLE') {
       // Snap back if not fully slid
       setSliderPosition(0);
     }
-  };
+  }, [sliderPosition, status]);
 
   useEffect(() => {
-    const handleGlobalPointerUp = () => handlePointerUp();
-    window.addEventListener('pointerup', handleGlobalPointerUp);
-    return () => window.removeEventListener('pointerup', handleGlobalPointerUp);
-  }, [sliderPosition, status]);
+    window.addEventListener('pointerup', handlePointerUp);
+    return () => window.removeEventListener('pointerup', handlePointerUp);
+  }, [handlePointerUp]);
 
   const initiateAtomicTransfer = async () => {
     setStatus('PROCESSING');

@@ -8,7 +8,7 @@
  * - Audit logging
  */
 
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/src/lib/supabase-server";
 import crypto from "crypto";
 
 // ============================================================================
@@ -20,6 +20,7 @@ export interface IdempotencyKey {
   createdAt: Date;
   transactionId?: string;
   status?: "pending" | "completed" | "failed";
+  metadata?: Record<string, any>;
 }
 
 export interface TransactionRequest {
@@ -174,7 +175,7 @@ async function getIdempotencyKeyFromIndexedDB(
 export async function processPurchaseTransaction(
   request: TransactionRequest
 ): Promise<TransactionResponse> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const userId = request.userId || (await supabase.auth.getUser()).data.user?.id;
 
   if (!userId) {
@@ -241,7 +242,7 @@ export async function processPurchaseTransaction(
 export async function getTransactionByIdempotencyKey(
   idempotencyKey: string
 ): Promise<TransactionResponse | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const { data, error } = await supabase
@@ -276,7 +277,7 @@ export async function getUserTransactionHistory(
   limit: number = 50,
   offset: number = 0
 ): Promise<TransactionResponse[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const { data, error } = await supabase.rpc(
@@ -312,7 +313,7 @@ export async function getUserTransactionHistory(
  * Created for cart modifications, address changes, checkout attempts, etc.
  */
 export async function logAuditEvent(entry: AuditLogEntry): Promise<string | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const clientIp = entry.ipAddress || (await getClientIp());
@@ -436,7 +437,7 @@ export function generateChangeHash(data: Record<string, any>): string {
 export async function isTransactionLocked(
   idempotencyKey: string
 ): Promise<boolean> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const { data, error } = await supabase
@@ -468,7 +469,7 @@ export async function isTransactionLocked(
 export async function verifyTransactionIntegrity(
   transactionId: string
 ): Promise<boolean> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const { data, error } = await supabase.rpc(

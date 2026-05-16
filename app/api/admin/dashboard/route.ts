@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/src/db";
-import { users, orders, products } from "@/src/db/schema";
+import { users, products } from "@/src/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
@@ -38,33 +38,15 @@ export async function GET() {
       allUsers = [];
     }
 
-    // Fetch all orders with product and user details with error handling
-    let allOrders = [];
-    try {
-      allOrders = await db
-        .select({
-          id: orders.id,
-          userId: orders.userId,
-          productName: products.name,
-          productPrice: products.price,
-          status: orders.status,
-          createdAt: orders.createdAt,
-          userName: users.name,
-          userEmail: users.email,
-        })
-        .from(orders)
-        .innerJoin(users, eq(orders.userId, users.id))
-        .innerJoin(products, eq(orders.id, products.id));
-    } catch (ordersErr) {
-      console.error("Error fetching orders:", ordersErr);
-      allOrders = [];
-    }
+    // Orders table has been removed in the new ledger architecture.
+    // We return empty results to maintain UI compatibility for now.
+    const allOrders: any[] = [];
 
     return NextResponse.json({
       users: allUsers,
       orders: allOrders,
       totalUsers: allUsers.length,
-      totalOrders: allOrders.length,
+      totalOrders: 0,
     });
   } catch (error) {
     console.error("Admin dashboard error:", error);

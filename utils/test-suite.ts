@@ -4,7 +4,7 @@
  * Run these tests to verify all advanced features are working correctly
  */
 
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/src/lib/supabase-server";
 import {
   processPurchaseTransaction,
   generateIdempotencyKey,
@@ -13,7 +13,7 @@ import {
   recoverTransaction,
 } from "@/utils/transaction-idempotency";
 
-const supabase = createClient();
+// Removed global supabase initialization because createClient is async
 
 /**
  * Test 1: Idempotency Key Generation
@@ -46,6 +46,7 @@ async function testIdempotentTransaction() {
   console.log("\n=== TEST 2: Idempotent Transaction Processing ===");
 
   try {
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -98,6 +99,7 @@ async function testDoubleEntryBookkeeping() {
   console.log("\n=== TEST 3: Double-Entry Bookkeeping ===");
 
   try {
+    const supabase = await createClient();
     // Verify can query ledger entries
     const { data, error } = await supabase
       .from("ledger_entry")
@@ -138,6 +140,7 @@ async function testRLSPolicies() {
   console.log("\n=== TEST 4: RLS Policies - Data Isolation ===");
 
   try {
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -180,6 +183,7 @@ async function testAuditLogging() {
   console.log("\n=== TEST 5: Audit Logging ===");
 
   try {
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -231,6 +235,7 @@ async function testTransactionIntegrity() {
   console.log("\n=== TEST 6: Transaction Integrity ===");
 
   try {
+    const supabase = await createClient();
     // Get a completed transaction
     const { data, error } = await supabase
       .from("transaction")
@@ -328,6 +333,7 @@ async function testAdminAccess() {
   console.log("\n=== TEST 9: Admin Access Control ===");
 
   try {
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -373,6 +379,7 @@ async function testDatabaseConnection() {
   console.log("\n=== TEST 10: Database Connection ===");
 
   try {
+    const supabase = await createClient();
     // Simple health check
     const { data, error } = await supabase
       .from("user")

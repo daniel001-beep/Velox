@@ -1,114 +1,52 @@
-/**
- * Admin API Route - Secure endpoint for admin operations
- * 
- * - Verifies admin status via JWT
- * - Never leaks sensitive data via RLS bypass
- * - Logs all access attempts
- */
-
-// @ts-ignore - Legacy Supabase integration, using Drizzle ORM
-import { createClient } from "@supabase/supabase-js";
+import { db } from "@/src/db";
+import { transactions, auditLogs, users, ledgerEntries } from "@/src/db/schema";
+import { eq, desc, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 
-// @ts-ignore
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-  {
-    auth: { persistSession: false },
-  }
-);
-
-/**
- * GET /api/admin/transactions
- * 
- * Returns transaction data for admin dashboard
- * Verifies admin status before returning
- */
 export async function GET(request: NextRequest) {
   try {
-    // Verify authorization header
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "Missing authorization" },
-        { status: 401 }
-      );
+    const session = await auth();
+    
+    if (!session || !session.user || !session.user.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const token = authHeader.substring(7);
+    // Verify admin status
+    const userData = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+    });
 
-    // Verify token and get user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabaseAdmin.auth.getUser(token);
-
-    if (authError || !user) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-    }
-
-    // Check if user is admin
-    const { data: userData, error: userError } = await supabaseAdmin
-      .from("user")
-      .select("is_admin")
-      .eq("id", user.id)
-      .single();
-
-    if (userError || !userData?.is_admin) {
-      // Log unauthorized access attempt
-      await logUnauthorizedAccess(user.id, request);
+    if (!userData?.isAdmin) {
+      await logUnauthorizedAccess(session.user.id, request);
       return NextResponse.json(
         { error: "Admin access required" },
         { status: 403 }
       );
     }
 
-    // Fetch transaction data
-    const { data: transactions, error: txError } = await supabaseAdmin
-      .from("transaction")
-      .select(
-        `
-        id,
-        user_id,
-        amount,
-        status,
-        created_at,
-        completed_at,
-        order_id,
-        error_message,
-        metadata
-      `
-      )
-      .order("created_at", { ascending: false })
-      .limit(100);
+    // Fetch transactions
+    const txList = await db.query.transactions.findMany({
+      orderBy: [desc(transactions.createdAt)],
+      limit: 100,
+    });
 
-    if (txError) {
-      throw txError;
-    }
-
-    // Get ledger entries for each transaction
+    // Get ledger entries summary for each
     const transactionsWithEntries = await Promise.all(
-      (transactions || []).map(async (tx) => {
-        const { data: entries } = await supabaseAdmin
-          .from("ledger_entry")
-          .select("entry_type, amount")
-          .eq("transaction_id", tx.id);
+      txList.map(async (tx) => {
+        const entries = await db.query.ledgerEntries.findMany({
+          where: eq(ledgerEntries.transactionId, tx.id),
+        });
 
-        const debitCount = entries?.filter(
-          (e: any) => e.entry_type === "debit"
-        ).length || 0;
-        const creditCount = entries?.filter(
-          (e: any) => e.entry_type === "credit"
-        ).length || 0;
+        const debitCount = entries.filter(e => e.entryType === "DEBIT").length;
+        const creditCount = entries.filter(e => e.entryType === "CREDIT").length;
 
         return {
           transactionId: tx.id,
-          userId: tx.user_id,
-          amount: tx.amount,
+          userId: tx.userId,
+          amount: Number(tx.amount) / 100,
           status: tx.status,
-          createdAt: tx.created_at,
-          completedAt: tx.completed_at,
+          createdAt: tx.createdAt,
           debitCount,
           creditCount,
         };
@@ -116,7 +54,7 @@ export async function GET(request: NextRequest) {
     );
 
     // Log successful access
-    await logAdminAccess(user.id, request, "transactions_viewed");
+    await logAdminAccess(session.user.id, request, "transactions_viewed");
 
     return NextResponse.json(
       { transactions: transactionsWithEntries },
@@ -131,70 +69,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * GET /api/admin/audit-logs
- * 
- * Returns audit logs for admin dashboard
- */
-export async function GET_AuditLogs(request: NextRequest) {
-  try {
-    const authHeader = request.headers.get("authorization");
-    const token = authHeader?.substring(7);
-
-    if (!token) {
-      return NextResponse.json(
-        { error: "Missing authorization" },
-        { status: 401 }
-      );
-    }
-
-    const {
-      data: { user },
-    } = await supabaseAdmin.auth.getUser(token);
-
-    if (!user) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-    }
-
-    const { data: userData } = await supabaseAdmin
-      .from("user")
-      .select("is_admin")
-      .eq("id", user.id)
-      .single();
-
-    if (!userData?.is_admin) {
-      await logUnauthorizedAccess(user.id, request);
-      return NextResponse.json(
-        { error: "Admin access required" },
-        { status: 403 }
-      );
-    }
-
-    const { data: logs, error: logsError } = await supabaseAdmin
-      .from("audit_log")
-      .select("*")
-      .order("timestamp", { ascending: false })
-      .limit(500);
-
-    if (logsError) {
-      throw logsError;
-    }
-
-    await logAdminAccess(user.id, request, "audit_logs_viewed");
-
-    return NextResponse.json({ logs }, { status: 200 });
-  } catch (error) {
-    console.error("Audit logs API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * Logs admin access for security audit
- */
 async function logAdminAccess(
   userId: string,
   request: NextRequest,
@@ -205,30 +79,20 @@ async function logAdminAccess(
       request.headers.get("x-forwarded-for") ||
       request.headers.get("x-real-ip") ||
       "unknown";
-    const userAgent = request.headers.get("user-agent") || "unknown";
 
-    await supabaseAdmin.from("audit_log").insert({
-      user_id: userId,
-      event_type: "admin_access",
-      entity_type: "admin",
-      entity_id: action,
-      changes: {
-        action,
-        timestamp: new Date().toISOString(),
-      },
-      change_hash: generateHash(`${userId}:${action}`),
-      ip_address: clientIp,
-      user_agent: userAgent,
+    await db.insert(auditLogs).values({
+      userId: userId,
+      eventType: "admin_access",
+      entityType: "admin",
+      entityId: action,
+      ipAddress: clientIp,
+      timestamp: new Date(),
     });
   } catch (error) {
     console.error("Failed to log admin access:", error);
-    // Don't throw - this shouldn't break the main flow
   }
 }
 
-/**
- * Logs unauthorized access attempts
- */
 async function logUnauthorizedAccess(
   userId: string,
   request: NextRequest
@@ -238,27 +102,17 @@ async function logUnauthorizedAccess(
       request.headers.get("x-forwarded-for") ||
       request.headers.get("x-real-ip") ||
       "unknown";
-    const userAgent = request.headers.get("user-agent") || "unknown";
 
-    await supabaseAdmin.from("audit_log").insert({
-      user_id: userId,
-      event_type: "unauthorized_admin_access",
-      entity_type: "admin",
-      entity_id: "access_denied",
-      changes: {
-        timestamp: new Date().toISOString(),
-        attempted_endpoint: request.nextUrl.pathname,
-      },
-      change_hash: generateHash(`${userId}:unauthorized`),
-      ip_address: clientIp,
-      user_agent: userAgent,
+    await db.insert(auditLogs).values({
+      userId: userId,
+      eventType: "unauthorized_admin_access",
+      entityType: "admin",
+      entityId: "access_denied",
+      ipAddress: clientIp,
+      timestamp: new Date(),
     });
   } catch (error) {
     console.error("Failed to log unauthorized access:", error);
   }
 }
 
-function generateHash(data: string): string {
-  // In a real implementation, use crypto
-  return data;
-}

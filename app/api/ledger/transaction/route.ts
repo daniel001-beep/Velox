@@ -50,75 +50,86 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Amount cannot be zero' }, { status: 400 });
     }
 
-    // Atomic transaction
-    const result = await db.transaction(async (tx) => {
-      // 1. Idempotency Check: Prevent duplicate processing
-      const existingTx = await tx.query.transactions.findFirst({
-        where: eq(transactions.idempotencyKey, idempotencyKey),
-      });
+    // Atomic transaction with retry logic for network resilience
+    const MAX_RETRIES = 2;
+    let result;
+    
+    for (let i = 0; i < MAX_RETRIES; i++) {
+      try {
+        result = await db.transaction(async (tx) => {
+          // 1. Idempotency Check: Prevent duplicate processing
+          const existingTx = await tx.query.transactions.findFirst({
+            where: eq(transactions.idempotencyKey, idempotencyKey),
+          });
 
-      if (existingTx) {
-        // Return existing to be idempotent
-        return { success: true, transaction: existingTx, idempotent: true };
+          if (existingTx) {
+            // Return existing to be idempotent
+            return { success: true, transaction: existingTx, idempotent: true };
+          }
+
+          // 2. Fetch the most recent transaction for this user to get previousHash
+          const lastTx = await tx.query.transactions.findFirst({
+            where: eq(transactions.userId, userId),
+            orderBy: [desc(transactions.createdAt)],
+          });
+
+          const previousHash = lastTx?.hash || null;
+          const timestamp = new Date();
+
+          // 3. Generate cryptographic hash
+          const hash = generateTransactionHash(
+            amountBigInt,
+            userId,
+            timestamp,
+            previousHash
+          );
+
+          // 4. Insert main transaction record
+          const [newTx] = await tx.insert(transactions).values({
+            userId,
+            orderId: orderId || null,
+            idempotencyKey,
+            amount: amountBigInt,
+            status: 'completed',
+            hash,
+            previousHash,
+            metadata: metadata || {},
+            createdAt: timestamp,
+            completedAt: timestamp,
+          }).returning();
+
+          // 5. Insert double-entry ledger records
+          await tx.insert(ledgerEntries).values({
+            transactionId: newTx.id,
+            userId,
+            accountType: 'MAIN',
+            entryType: amountBigInt > 0n ? 'CREDIT' : 'DEBIT',
+            amount: amountBigInt,
+            description: description || 'Ledger transaction',
+            createdAt: timestamp,
+          });
+
+          // Offset entry for balance
+          await tx.insert(ledgerEntries).values({
+            transactionId: newTx.id,
+            userId: 'SYSTEM',
+            accountType: 'SETTLEMENT',
+            entryType: amountBigInt > 0n ? 'DEBIT' : 'CREDIT',
+            amount: -amountBigInt,
+            description: `Offset for transaction ${newTx.id}`,
+            createdAt: timestamp,
+          });
+
+          return { success: true, transaction: newTx, idempotent: false };
+        });
+        
+        break; // Success!
+      } catch (error) {
+        if (i === MAX_RETRIES - 1) throw error; // Re-throw if last attempt fails
+        console.warn(`Transaction attempt ${i + 1} failed due to network. Retrying...`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
       }
-
-      // 2. Fetch the most recent transaction for this user to get previousHash
-      const lastTx = await tx.query.transactions.findFirst({
-        where: eq(transactions.userId, userId),
-        orderBy: [desc(transactions.createdAt)],
-      });
-
-      const previousHash = lastTx?.hash || null;
-      const timestamp = new Date();
-
-      // 3. Generate cryptographic hash
-      const hash = generateTransactionHash(
-        amountBigInt,
-        userId,
-        timestamp,
-        previousHash
-      );
-
-      // 4. Insert main transaction record
-      const [newTx] = await tx.insert(transactions).values({
-        userId,
-        orderId: orderId || null,
-        idempotencyKey,
-        amount: amountBigInt,
-        status: 'completed', // For this synchronous example, we mark completed
-        hash,
-        previousHash,
-        metadata: metadata || {},
-        createdAt: timestamp,
-        completedAt: timestamp,
-      }).returning();
-
-      // 5. Insert double-entry ledger records
-      // In a real double-entry system, we'd have a debit and a credit.
-      // Here, we create the user's primary ledger entry.
-      await tx.insert(ledgerEntries).values({
-        transactionId: newTx.id,
-        userId,
-        accountType: 'MAIN',
-        entryType: amountBigInt > 0n ? 'CREDIT' : 'DEBIT',
-        amount: amountBigInt,
-        description: description || 'Ledger transaction',
-        createdAt: timestamp,
-      });
-
-      // Optionally, create the counter-party entry (e.g., SYSTEM or PLATFORM)
-      await tx.insert(ledgerEntries).values({
-        transactionId: newTx.id,
-        userId: 'SYSTEM',
-        accountType: 'SETTLEMENT',
-        entryType: amountBigInt > 0n ? 'DEBIT' : 'CREDIT',
-        amount: -amountBigInt, // Balancing entry
-        description: `Offset for transaction ${newTx.id}`,
-        createdAt: timestamp,
-      });
-
-      return { success: true, transaction: newTx, idempotent: false };
-    });
+    }
 
     // 6. Dispatch webhook for new successful transactions (Async)
     if (result.success && !result.idempotent) {

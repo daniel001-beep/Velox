@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react';
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -12,59 +10,59 @@ import {
   Area,
   AreaChart,
 } from 'recharts';
-
-const data1M = [
-  { name: '1W', value: 2750000 },
-  { name: '2W', value: 2780000 },
-  { name: '3W', value: 2810000 },
-  { name: '4W', value: 2847392 },
-];
-
-const data3M = [
-  { name: 'Month 1', value: 2600000 },
-  { name: 'Month 2', value: 2710000 },
-  { name: 'Month 3', value: 2847392 },
-];
-
-const dataYTD = [
-  { name: 'Jan', value: 2400000 },
-  { name: 'Feb', value: 2550000 },
-  { name: 'Mar', value: 2680000 },
-  { name: 'Apr', value: 2750000 },
-  { name: 'May', value: 2847392 },
-];
-
-const data1Y = [
-  { name: 'Jun', value: 2200000 },
-  { name: 'Jul', value: 2250000 },
-  { name: 'Aug', value: 2310000 },
-  { name: 'Sep', value: 2280000 },
-  { name: 'Oct', value: 2350000 },
-  { name: 'Nov', value: 2420000 },
-  { name: 'Dec', value: 2500000 },
-  { name: 'Jan', value: 2400000 },
-  { name: 'Feb', value: 2550000 },
-  { name: 'Mar', value: 2680000 },
-  { name: 'Apr', value: 2750000 },
-  { name: 'May', value: 2847392 },
-];
+import { UITransaction } from './LedgerClient';
 
 type TimeRange = '1M' | '3M' | 'YTD' | '1Y';
 
-export default function PortfolioPerformance() {
+interface PortfolioPerformanceProps {
+  transactions?: UITransaction[];
+  totalBalance?: number;
+}
+
+export default function PortfolioPerformance({ transactions = [], totalBalance = 0 }: PortfolioPerformanceProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>('YTD');
 
-  const getData = () => {
-    switch (timeRange) {
-      case '1M': return data1M;
-      case '3M': return data3M;
-      case 'YTD': return dataYTD;
-      case '1Y': return data1Y;
-      default: return dataYTD;
+  // Generate dynamic data based on transactions
+  const generateDynamicData = (range: TimeRange) => {
+    // Sort transactions by date (assuming they are in order already, but let's be safe)
+    const sortedTx = [...transactions].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    
+    // Start from an initial balance and build up
+    let runningBalance = Math.max(0, totalBalance - transactions.reduce((acc, tx) => acc + tx.amount, 0));
+    
+    // Number of points to show
+    const pointCount = range === '1M' ? 4 : range === '3M' ? 6 : range === 'YTD' ? 8 : 12;
+    const data: any[] = [];
+
+    // Simple distribution of transaction impact over the points
+    const txPerPoint = Math.max(1, Math.floor(transactions.length / pointCount));
+
+    for (let i = 0; i < pointCount; i++) {
+      const label = range === '1M' ? `W${i+1}` : range === '3M' ? `M${i+1}` : `Point ${i+1}`;
+      
+      // Add impact of transactions for this period
+      const startIdx = i * txPerPoint;
+      const endIdx = (i + 1) * txPerPoint;
+      const periodTx = sortedTx.slice(startIdx, endIdx);
+      
+      const periodChange = periodTx.reduce((acc, tx) => acc + tx.amount, 0);
+      runningBalance += periodChange;
+
+      data.push({
+        name: label,
+        value: runningBalance
+      });
     }
+
+    // Ensure the last point matches the current balance
+    if (data.length > 0) {
+      data[data.length - 1].value = totalBalance;
+    }
+
+    return data;
   };
 
-  const currentData = getData();
+  const currentData = generateDynamicData(timeRange);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -130,7 +128,7 @@ export default function PortfolioPerformance() {
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(val) => "$" + (val / 1000000).toFixed(1) + "M"}
+              tickFormatter={(val) => val >= 1000000 ? "$" + (val / 1000000).toFixed(1) + "M" : "$" + (val / 1000).toFixed(0) + "K"}
               dx={-10}
             />
             <Tooltip content={<CustomTooltip />} />

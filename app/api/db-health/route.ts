@@ -8,7 +8,8 @@ export async function GET(request: Request) {
     const session = await auth();
     
     // API Zero-Trust Security: Ensure only authenticated admins can hit this endpoint
-    if (!session || !session.user || !session.user.isAdmin) {
+    const isAdmin = (session?.user as any)?.isAdmin;
+    if (!session || !session.user || !isAdmin) {
       return NextResponse.json({ error: "Unauthorized access blocked by API Gateway" }, { status: 401 });
     }
     // Try to count products in the database

@@ -33,8 +33,8 @@ if (isProduction) {
       },
       max: 10,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 15000, // Increased to 15s for network hiccups
-      query_timeout: 10000, // 10s query timeout
+      connectionTimeoutMillis: 60000, // 60s for severe network instability
+      query_timeout: 30000, // 30s query timeout
     });
     
     (global as any).db = drizzle(pool, { schema });

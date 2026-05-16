@@ -2,6 +2,7 @@
 
 import { createContext, useState, useEffect } from "react";
 import { SessionProvider } from "next-auth/react";
+import { NotificationProvider } from "../context/NotificationContext";
 
 export const CartContext = createContext<any>(null);
 
@@ -63,9 +64,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionProvider>
-      <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, cartCount, cartTotal }}>
-        {children}
-      </CartContext.Provider>
+      <NotificationProvider>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, cartCount, cartTotal }}>
+          {children}
+        </CartContext.Provider>
+      </NotificationProvider>
     </SessionProvider>
   );
 }

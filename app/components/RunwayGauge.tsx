@@ -22,12 +22,12 @@ export default function RunwayGauge({ balance, monthlyOutflow }: RunwayGaugeProp
     { name: 'Empty', value: remainingScale },
   ];
 
-  // Colors: Red (< 6m), Yellow (6-12m), Green (> 12m)
-  let fillColor = '#10b981'; // emerald-500
+  // Color: Blue theme
+  let fillColor = '#3b82f6'; // blue-500
   if (runwayMonths < 6) {
-    fillColor = '#ef4444'; // rose-500
+    fillColor = '#2563eb'; // blue-600
   } else if (runwayMonths < 12) {
-    fillColor = '#f59e0b'; // amber-500
+    fillColor = '#60a5fa'; // blue-400
   }
 
   const COLORS = [fillColor, '#1e293b']; // Filled vs Empty track
